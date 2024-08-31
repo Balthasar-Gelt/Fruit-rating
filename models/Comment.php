@@ -66,20 +66,4 @@ class Comment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
-
-    public function getLatestReviews(?int $limit = null, bool $withUser = true)
-    {
-        $query = Comment::find()
-            ->select(['text', 'rating', 'user_id', 'api_fruit_id'])
-            ->orderBy(['created_at' => SORT_DESC])
-            ->limit($limit);
-
-        if ($withUser) {
-            $query->with(['user' => function ($query) {
-                $query->select(['id', 'name']);
-            }]);
-        }
-
-        return $query->all();
-    }
 }
