@@ -9,6 +9,12 @@ class RatingService extends Component
 {
     function __construct(private FruitService $fruitService, private FruitDataTransformer $transformer) {}
 
+    /**
+     * Retrieves the top-rated fruits, optionally limited by a specified number.
+     *
+     * @param int|null $limit The maximum number of top-rated fruits to retrieve (null means no limit).
+     * @return array The top-rated fruits with their ratings appended.
+     */
     public function getTopRatedFruits(?int $limit = null): array
     {
         $topFruits = [];
@@ -20,6 +26,13 @@ class RatingService extends Component
         return $this->transformer->appendToFruits(['rating'], $topFruits);
     }
 
+    /**
+     * Retrieves the top fruit ratings, optionally limited by a specified number and ordered.
+     *
+     * @param int|null $limit The maximum number of top ratings to retrieve (null means no limit).
+     * @param int|string $order The order of the ratings (default is descending).
+     * @return array The top fruit ratings.
+     */
     public function getTopRatings(?int $limit = null, int|string $order = SORT_DESC): array
     {
         return (new Query())

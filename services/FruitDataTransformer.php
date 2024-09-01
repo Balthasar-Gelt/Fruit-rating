@@ -4,12 +4,25 @@ namespace app\services;
 
 class FruitDataTransformer
 {
+    // Default sort field (name of the fruit)
     private $defaultSort = 'name';
+
+    // Default sort order (ascending)
     private $defaultOrder = SORT_ASC;
+
+    // List of available appendable data fields (rating and comments)
     private $availableAppends = ['rating', 'comments'];
 
     function __construct(private FruitService $fruitService) {}
 
+    /**
+     * Sorts the fruit data array by a specified field and order.
+     *
+     * @param array $data The fruit data to sort.
+     * @param string|null $sortBy The field to sort by (defaults to 'name' if null).
+     * @param int|string|null $order The sort order, either 'asc'/'desc' or SORT_ASC/SORT_DESC (defaults to SORT_ASC if null).
+     * @return array The sorted fruit data.
+     */
     public function sortFruitData(array $data, string $sortBy = null, int|string $order = null): array
     {
         $sortBy = $sortBy ?? $this->defaultSort;
@@ -27,11 +40,12 @@ class FruitDataTransformer
     }
 
     /**
-     * Appends to provided fruits their given associations.
+     * Appends additional data (like rating or comments) to the fruit data array.
      *
      * @param array $appends Array of associations to be appended.
-     * @param string $data Fruit data.
-     * @return array Modified fruit data with appends.
+     * @param array $data The fruit data to modify.
+     * @return array The modified fruit data with appended information.
+     * @throws \Exception If a method to append the data does not exist.
      */
     public function appendToFruits(array $appends, array $data): array
     {
@@ -50,6 +64,13 @@ class FruitDataTransformer
         return $data;
     }
 
+    /**
+     * Validates the requested append types against the available ones.
+     *
+     * @param array $appends The append types requested by the user.
+     * @return array The filtered and valid append types.
+     * @throws \InvalidArgumentException If no valid append types are provided.
+     */
     private function validateAppends(array $appends): array
     {
         $filteredAppends = [];
@@ -67,6 +88,12 @@ class FruitDataTransformer
         return $filteredAppends;
     }
 
+    /**
+     * Appends the 'rating' data to each fruit in the data array.
+     *
+     * @param array $data The fruit data to modify.
+     * @return array The modified fruit data with appended ratings.
+     */
     private function appendRating(array $data): array
     {
         foreach ($data as &$fruit) {
@@ -76,6 +103,12 @@ class FruitDataTransformer
         return $data;
     }
 
+    /**
+     * Appends the 'comments' data to each fruit in the data array.
+     *
+     * @param array $data The fruit data to modify.
+     * @return array The modified fruit data with appended comments.
+     */
     private function appendComments(array $data): array
     {
         foreach ($data as &$fruit) {

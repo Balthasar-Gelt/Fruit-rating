@@ -8,8 +8,16 @@ use yii\db\Query;
 
 class FruitService
 {
+    // API URL for fetching fruit data
     private $apiUrl = 'https://fruityvice.com/api/fruit/';
 
+    /**
+     * Fetches fruit data from the API based on the provided query.
+     *
+     * @param string $query The query parameter for the API request.
+     * @return array The fruit data returned by the API.
+     * @throws \Exception If the API request fails.
+     */
     public function getFruitData(string $query): array
     {
         $url = $this->apiUrl . "$query";
@@ -22,6 +30,12 @@ class FruitService
         }
     }
 
+    /**
+     * Retrieves the average rating for a fruit by its ID.
+     *
+     * @param int $id The ID of the fruit.
+     * @return string|int The average rating, or 0 if no ratings are found.
+     */
     public function getFruitRating(int $id): string|int
     {
         return (new Query())
@@ -31,6 +45,12 @@ class FruitService
             ->scalar() ?: 0;
     }
 
+    /**
+     * Retrieves the reviews for a fruit by its ID.
+     *
+     * @param int $id The ID of the fruit.
+     * @return array The list of reviews for the fruit.
+     */
     public function getFruitReviews(int $id): array
     {
         return Comment::find()
